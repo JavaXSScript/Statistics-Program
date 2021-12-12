@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Generate new batch</title>
+        <style>
+            @keyframes btn-shake
+            {
+                0% {
+                    transform: rotateZ(0deg);
+                }
+                25% {
+                    transform: rotateZ(3deg);
+                }
+                50% {
+                    transform: rotateZ(-3deg);
+                }
+                100% {
+                    transform: rotateZ(0deg);
+                }
+            }
+            body
+            {
+                background-color: #645959;
+                font-family: sans-serif;
+            }
+            .main-header
+            {
+                text-align: center;
+                border-bottom: 1px solid black;
+            }
+            .input-information
+            {
+                padding-left: 10px;
+                margin: 0 auto;
+                width: 50%;
+                border-left: 1px solid black;
+            }
+            .input-information input
+            {
+                padding: 1px;
+                display: block;
+                background-color: grey;
+            }
+            .input-information button
+            {
+                display: block;
+                margin-top: 10px;
+                border-radius: 3px;
+                border: 1px solid black;
+                width: 70px;
+                height: 20px;
+                cursor: pointer;
+                background-color: grey;
+                user-select: none;
+            }
+            .input-information-align-left
+            {
+                text-align: left;
+            }
+            #generation-status
+            {
+                color: white;
+            }
+            #generation-status:is(.gen-status-ERR)
+            {
+                color: darkred;
+            }
+        </style>
+        <script>
+            const load = () => {
+                const btnListener = async (e) => {
+                    const MAX_HIGH_NUMBER = 20000000;
+                    const btn = e.srcElement;
+                    btn.style.animation = "";
+                    btn.style.borderColor = "";
+                    btn.disabled = "true";
+                    const highInput = document.querySelector("#num_high");
+                    const iterInput = document.querySelector("#prgm_iter");
+                    const genStatusP = document.querySelector("#generation-status");
+                    iterInput.style.borderColor = "";
+                    highInput.style.borderColor = "";
+                    genStatusP.classList.remove("gen-status-ERR");
+                    genStatusP.textContent = "";
+                    const high = Number(document.querySelector("#num_high").value);
+                    let iter = Number(document.querySelector("#prgm_iter").value);
+                    if(iter > MAX_HIGH_NUMBER) {
+                        btn.style.animation = "btn-shake 0.2s linear";
+                        btn.style.borderColor = "red";
+                        iterInput.style.borderColor = "red";
+                        btn.disabled = "";
+                    }
+                    if(high < 1) {
+                        btn.style.animation = "btn-shake 0.2s linear";
+                        btn.style.borderColor = "red";
+                        highInput.style.borderColor = "red";
+                        btn.disabled = "";   
+                    }
+                    if (iter === '') iter = 0;
+                    //Added it after so that both can be red.
+                    if(high < 1 || iter > MAX_HIGH_NUMBER) return;
+                    let res = {
+                        ok: false,
+                        status: "N/A"
+                    };
+                    let rJSON = {};
+                    try{
+                        res = await fetch('/generateNums',  {
+                            method: "POST",
+                            body: JSON.stringify({
+                                "MaxRandom": high,
+                                "ProgramIterations": iter
+                            })
+                        });
+                        rJSON = await res.json();
+                    }
+                    catch(err){
+
+                    }
+                    if(res.ok){
+                        if(genStatusP.classList.contains("gen-status-ERR")){
+                            genStatusP.classList.toggle("gen-status-ERR");
+                        }
+                        genStatusP.textContent = "Generation finished. Proceed to http://localhost:" + rJSON.Port + " to see results.";
+                    }
+                    else{
+                        if(!genStatusP.classList.contains("gen-status-ERR")){
+                            genStatusP.classList.toggle("gen-status-ERR");
+                        }
+                        genStatusP.textContent = "Generation failed with status " + res.status + "! Try again...";
+                    }
+                    btn.disabled = "";
+                };
+                document.querySelector("#generate-btn").addEventListener("click", btnListener);
+            };
+            window.addEventListener("load", load);
+        </script>
+    </head>
+    <body>
+        <main>
+            <header class="main-header">
+                <h1>Generate numbers</h1>
+            </header>
+            <section class="input-information">
+                <div class="input-information-align-left"></div>
+                <h3>Input program parameters</h3>
+                <p>Number high (exclusive) - number low will be 0</p>
+                <h6>Number must be at least 1 or higher</h6>
+                <input type="number" id = "num_high">
+                <p>Program iterations (max is 20 million)</p>
+                <input type="number" id="prgm_iter">
+                <button id="generate-btn">Submit</button>
+                <p id="generation-status" class="success"></p>
+            </section>
+        </main>
+    </body>
+</html>

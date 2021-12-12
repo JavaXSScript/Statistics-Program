@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Calculation results</title>
+        <style>
+            body
+            {
+                background-color: #645959;
+                font-family: sans-serif;
+            }
+            .main-header
+            {
+                padding-bottom: 10px;
+                padding-left: 50px;
+                border-bottom: 1px solid black;
+                color: #ffeeee;
+            }
+            .divider_1px
+            {
+                width: 50%;
+                border-bottom: 1px solid black;
+            }
+            .divider_2px
+            {
+                width: 50%;
+                border-bottom: 2px solid black;
+            }
+            .information-section
+            {
+                border-bottom: 1px solid black;
+            }
+            .time
+            {
+                padding-left: 10px;
+            }
+            th, td
+            {
+                border: 1px solid black;
+            }
+        </style>
+        <script>
+            const {DOMParser} = globalThis;
+            const onload = async () => {
+                const occurrences = await (await fetch("/getOccurrences")).json();
+                document.querySelector("#tr_loading").remove();
+                Object.entries(occurrences).forEach(obj => {
+                    const num = obj[0];
+                    const occ = obj[1];
+                    //Cannot use templating because otherwise it ends the string in Go (which cannot be escaped), causing errors
+                    const trInnerS = "<td>" + num + "</td><td>" + occ + "</td>";
+                    const parser = new DOMParser();
+                    const trInner = parser.parseFromString(trInnerS, "text/html");
+                    const tr = document.createElement("tr");
+                    tr.append(trInner);
+                    document.querySelector("#frequency-distribution").appendChild(td);
+                });
+            };
+            window.addEventListener("load", onload);
+        </script>
+    </head>
+    <body>
+        <header class="main-header">
+            <h1>Test results</h1>
+        </header>
+        <main>
+            <section class="time information-section">
+                <h1>Time</h1>
+                <p>Total time taken for number generation: ~x seconds (start in Unix micro: ; end in Unix micro: )</p>
+                <p>Total time taken for result classification and processing: ~x seconds (start in Unix micro: ; end in Unix micro: )</p>
+                <div class="divider_2px"></div>
+                <h3>Total time taken to complete: ~x seconds (start in Unix micro: ; end in Unix micro: )</h3>
+            </section>
+            <section class="summary-statistics information-section">
+                <h1>Summary Statistics</h1>
+                <p>Mean: </p>
+                <p>Standard deviation: </p>
+                <p>Population mean: </p>
+                <p>Population standard deviation: </p>
+            </section>
+            <section class="frequency-table information-section">
+                <h1>Frequency Distribution of Occurrences</h1>
+                <table id="frequency-distribution">
+                    <tr>
+                        <th>Number</th>
+                        <th>Occurrences of that number</th>
+                    </tr>
+                    <tr id="tr_loading">
+                        <td>Loading...</td>
+                        <td>Loading...</td>
+                    </tr>
+                </table>
+            </section>
+        </main>
+    </body>
+</html>
