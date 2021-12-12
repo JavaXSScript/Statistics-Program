@@ -1,0 +1,61 @@
+{
+  "RT_GROUP_ICON": {
+    "APP": {
+      "0000": [
+        "ico.png",
+        "ico large.png"
+      ]
+    }
+  },
+  "RT_MANIFEST": {
+    "#1": {
+      "0409": {
+        "identity": {
+          "name": "Statistics Program",
+          "version": "0.0.0.0"
+        },
+        "description": "Statistics Program",
+        "minimum-os": "win7",
+        "execution-level": "as invoker",
+        "ui-access": false,
+        "auto-elevate": false,
+        "dpi-awareness": "system",
+        "disable-theming": false,
+        "disable-window-filtering": false,
+        "high-resolution-scrolling-aware": false,
+        "ultra-high-resolution-scrolling-aware": false,
+        "long-path-aware": false,
+        "printer-driver-isolation": false,
+        "gdi-scaling": false,
+        "segment-heap": false,
+        "use-common-controls-v6": false
+      }
+    }
+  },
+  "RT_VERSION": {
+    "#1": {
+      "0000": {
+        "fixed": {
+          "file_version": "0.0.0.0",
+          "product_version": "0.0.0.0"
+        },
+        "info": {
+          "0409": {
+            "Comments": "Made with love by Baconman321, for their statistics experiment",
+            "CompanyName": "Baconman321",
+            "FileDescription": "Randomly generates numbers and performs a statistal analysis on them",
+            "FileVersion": "0.0.0.0",
+            "InternalName": "",
+            "LegalCopyright": "Baconman321",
+            "LegalTrademarks": "",
+            "OriginalFilename": "",
+            "PrivateBuild": "",
+            "ProductName": "",
+            "ProductVersion": "",
+            "SpecialBuild": ""
+          }
+        }
+      }
+    }
+  }
+}
