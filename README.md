@@ -2,7 +2,7 @@
 
 Made for my experiment project for my statistics class.
 
-Because I needed to be quick and am not focused on compatibility, nor code optimization, this is very messsy and will only be guaranteed to work on Windows (sorry, Linux users).
+Because I needed to be quick and am not focused on compatibility, nor code optimization, this is very messsy and will only be guaranteed to work on Windows (sorry, Linux/Mac/Other OS users).
 
 ## How to run
 
